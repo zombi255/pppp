@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f myproject/requirements.txt ]; then pip install -r myproject/requirements.txt; fi
-        pip install dj-database-url psycopg2-binary  # للتعامل مع PostgreSQL على Render
+        pip install dj-database-url psycopg2-binary
 
     # 4️⃣ Run migrations locally (test)
     - name: Run local migrations
@@ -46,23 +46,29 @@ jobs:
       run: |
         python myproject/manage.py test cours --settings=myproject.settings_test --verbosity=2
 
-    # 7️⃣ Set up Docker Buildx
+    # 7️⃣ Verify Dockerfile exists
+    - name: Verify Dockerfile
+      run: |
+        echo "Listing files in myproject/"
+        ls -l myproject/
+
+    # 8️⃣ Set up Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # 8️⃣ Build Docker image
+    # 9️⃣ Build Docker image
     - name: Build Docker Image
       run: |
         docker build -f myproject/Dockerfile -t django-app .
 
-    # 9️⃣ Run Docker container (اختياري لاختبار)
+    # 🔟 Run Docker container (optional for testing)
     - name: Run Docker Container
       run: |
         docker run -d -p 8000:8000 --name django-app-test django-app
         sleep 10
         docker ps -a
 
-    # 🔟 Deploy to Render
+    # 1️⃣1️⃣ Deploy to Render
     - name: Deploy to Render
       run: |
         curl -X POST "https://api.render.com/deploy/srv-d4k83sbuibrs73fatdt0?key=rnd_q3BUcT9zhiOIuzP0YlaPgXUnyZqJ"
