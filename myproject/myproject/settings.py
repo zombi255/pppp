@@ -138,6 +138,14 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = False
 
+import dj_database_url
+import os
+
+DATABASES = {
+    "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+}
+
+
 DEBUG = True
 APPEND_SLASH = True
 CORS_ALLOW_ALL_ORIGINS = True
