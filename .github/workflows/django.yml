@@ -45,7 +45,8 @@ jobs:
     - name: Build Docker Image
       run: |
         # استخدم Dockerfile الموجود في myproject/
-        docker build -f myproject/Dockerfile -t django-app .
+         docker build -f myproject/Dockerfile -t django-app myproject/
+
 
     - name: Run Docker Container
       run: |
