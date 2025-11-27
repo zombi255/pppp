@@ -17,8 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # نسخ كامل المشروع
 COPY myproject/ /app/
 
-# ضبط PORT الديناميكي لـ Render
-ENV PORT 10000  # قيمة افتراضية فقط، Render سيعطي متغيره الخاص
+
 
 # تشغيل الخادم باستخدام PORT الذي يوفره Render
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:$PORT"]
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:9090"]
