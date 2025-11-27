@@ -28,50 +28,41 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f myproject/requirements.txt ]; then pip install -r myproject/requirements.txt; fi
-        pip install dj-database-url psycopg2-binary
+        pip install dj-database-url psycopg2-binary  # للتعامل مع PostgreSQL على Render
 
-    # 4️⃣ Run migrations
-    - name: Run migrations
+    # 4️⃣ Run migrations locally (test)
+    - name: Run local migrations
       run: |
         python myproject/manage.py makemigrations --settings=myproject.settings_test
         python myproject/manage.py migrate --settings=myproject.settings_test
 
-    # 5️⃣ Run Django tests
+    # 5️⃣ Run migrations on Render (external DB)
+    - name: Run migrations on Render
+      run: |
+        python myproject/manage.py migrate --settings=myproject.settings_render
+
+    # 6️⃣ Run Django tests
     - name: Run Django Tests
       run: |
         python myproject/manage.py test cours --settings=myproject.settings_test --verbosity=2
 
-    # 6️⃣ Set up Docker Buildx
+    # 7️⃣ Set up Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # 7️⃣ Build Docker image
+    # 8️⃣ Build Docker image
     - name: Build Docker Image
       run: |
         docker build -f myproject/Dockerfile -t django-app .
 
-    # 8️⃣ Run Docker container (اختياري لاختبار)
+    # 9️⃣ Run Docker container (اختياري لاختبار)
     - name: Run Docker Container
       run: |
         docker run -d -p 8000:8000 --name django-app-test django-app
         sleep 10
         docker ps -a
 
-    # 9️⃣ Deploy to Render
+    # 🔟 Deploy to Render
     - name: Deploy to Render
-      env:
-        DATABASE_URL: ${{ secrets.RENDER_DATABASE_URL }}
       run: |
-        # نشر الحاوية على Render
         curl -X POST "https://api.render.com/deploy/srv-d4k83sbuibrs73fatdt0?key=rnd_q3BUcT9zhiOIuzP0YlaPgXUnyZqJ"
-        
-        # استعادة dump.sql إلى قاعدة Render (إذا كان متوفرًا)
-        if [ -f dump.sql ]; then
-          echo "Restoring database dump..."
-          PGPASSWORD=$(echo $DATABASE_URL | cut -d':' -f3 | cut -d'@' -f1)
-          PGHOST=$(echo $DATABASE_URL | cut -d'@' -f2 | cut -d':' -f1)
-          PGPORT=$(echo $DATABASE_URL | cut -d':' -f4 | cut -d'/' -f1)
-          PGUSER=$(echo $DATABASE_URL | cut -d':' -f2 | cut -d'/' -f1)
-          PGDATABASE=$(echo $DATABASE_URL | cut -d'/' -f2)
-          psql "postgresql://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE" < dump.sql
-        fi
