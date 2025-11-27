@@ -44,10 +44,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        # إذا كان Dockerfile في جذر المشروع
         if [ -f Dockerfile ]; then docker build -t django-app .; fi
-        
-        # إذا كان Dockerfile داخل myproject/
         if [ -f myproject/Dockerfile ]; then docker build -f myproject/Dockerfile -t django-app .; fi
 
     - name: Run Docker Container
@@ -56,3 +53,6 @@ jobs:
         sleep 10
         docker ps -a
 
+    - name: Deploy to Render
+      run: |
+        curl -X POST "https://api.render.com/deploy/srv-d4k83sbuibrs73fatdt0?key=rnd_q3BUcT9zhiOIuzP0YlaPgXUnyZqJ"
