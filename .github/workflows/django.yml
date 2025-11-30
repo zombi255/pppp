@@ -52,7 +52,7 @@ jobs:
       # 8️⃣ Build Docker image (correct Dockerfile path)
       - name: Build Docker Image
         run: |
-          docker build -f myproject/Dockerfile -t django-app .
+          docker build -f Dockerfile -t django-app .
 
       # 9️⃣ Trigger Render deployment
       - name: Deploy to Render
