@@ -1,0 +1,42 @@
+Use an official Python runtime as base image,
+FROM python:3.11-slim-bullseye
+
+Set work directory,
+WORKDIR /app
+
+Install system dependencies,
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+        gettext && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+Copy requirements file,
+COPY requirements.txt .
+
+Install Python dependencies,
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+Copy project,
+COPY . .
+
+Create static files directory and set permissions,
+RUN mkdir -p /app/staticfiles && \
+    chmod 755 /app/staticfiles
+
+Collect static files,
+RUN python manage.py collectstatic --noinput --settings=myproject.settings
+
+Run database migrations (remove if you want to run manually),
+RUN python manage.py migrate --settings=myproject.settings
+
+Create superuser (optional - remove in production),
+RUN echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'adminpassword')" | python manage.py shell --settings=myproject.settings,
+Expose port,
+EXPOSE 8000
+
+Run application,
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "myproject.wsgi:application"]
