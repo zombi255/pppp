@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Exit on error
-set -e
-cd /app/api
-# Apply database migrations
-echo "Running migrations..."
-python manage.py migrate --noinput
+set -o errexit
 
-# Collect static files (optional)
-# echo "Collecting static files..."
-# python manage.py collectstatic --noinput
+echo "Running Django migrations..."
+python manage.py migrate
 
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+echo "Starting application..."
+exec "$@"

@@ -1,27 +1,34 @@
 FROM python:3.12-slim
 
+# Working directory
 WORKDIR /app
 
-# تثبيت المكتبات الأساسية للنظام
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# نسخ ملف المتطلبات
+# --------------------------
+# FIXED: requirements path
+# --------------------------
+# Copy requirements FIRST (better Docker cache)
 COPY myproject/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# نسخ المشروع كله
+# Copy all project files
 COPY myproject/ /app/
 
-Copy entrypoint and set it
+# --------------------------
+# Entrypoint
+# --------------------------
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
 
-# تشغيل Django على المنفذ الذي يوفره Render
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:$PORT"]
-
-
-
+# --------------------------
+# Render command
+# --------------------------
+# Render sets $PORT automatically
+CMD ["sh", "-c", "gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT"]
