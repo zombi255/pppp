@@ -24,7 +24,8 @@ RUN apt-get update && \
 RUN useradd --create-home appuser
 
 # نسخ ملف المتطلبات من نفس المجلد الذي فيه Dockerfile
-COPY requirements.txt ./
+COPY myproject/ ./
+
 
 # تثبيت مكتبات Python
 RUN python -m pip install --upgrade pip \
