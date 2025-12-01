@@ -60,6 +60,7 @@ jobs:
 
       # 8️⃣ Build Docker Image
       - name: Build Docker Image
+        working-directory: myproject
         run: |
           docker build -f Dockerfile -t django-app .
 
