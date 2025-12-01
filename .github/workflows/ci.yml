@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 3️⃣ Install dependencies (test environment only)
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         working-directory: myproject
         run: |
@@ -46,9 +46,11 @@ jobs:
         run: |
           python manage.py test cours --settings=myproject.settings_test --verbosity=2
 
-      # 6️⃣ Check Dockerfile
+      # 6️⃣ Verify Dockerfile location
       - name: Verify Dockerfile
         run: |
+          echo "Listing files in root:"
+          ls -l
           echo "Listing files in myproject/"
           ls -l myproject/
 
@@ -56,12 +58,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 8️⃣ Build Docker Image (for Render)
+      # 8️⃣ Build Docker Image
       - name: Build Docker Image
         run: |
           docker build -f Dockerfile -t django-app .
 
-      # 9️⃣ Trigger Render Deployment
+      # 9️⃣ Deploy to Render
       - name: Deploy to Render
         run: |
           curl -X POST "https://api.render.com/deploy/srv-d4k83sbuibrs73fatdt0?key=rnd_q3BUcT9zhiOIuzP0YlaPgXUnyZqJ"
