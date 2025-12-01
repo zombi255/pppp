@@ -40,9 +40,6 @@ jobs:
         run: |
           python manage.py test cours --settings=myproject.settings_test --verbosity=2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build Docker Image
         working-directory: myproject
         run: |
@@ -52,4 +49,4 @@ jobs:
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: srv-d4mtuh7gi27c738j83cg
-          api-key: rnd_QZojxVIgxdT5e00GEw34yBfDgeh7
+          api-key:  rnd_QZojxVIgxdT5e00GEw34yBfDgeh7 
