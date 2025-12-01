@@ -57,8 +57,9 @@ jobs:
 
       # 8️⃣ Build Docker Image (Dockerfile موجود في myproject/)
       - name: Build Docker Image
+        working-directory: .
         run: |
-          docker build -f myproject/Dockerfile -t django-app myproject/
+          docker build -f Dockerfile -t django-app .
 
       # 9️⃣ Deploy to Render
       - name: Deploy to Render
