@@ -64,4 +64,4 @@ jobs:
       # 9️⃣ Deploy to Render
       - name: Deploy to Render
         run: |
-          curl -X POST "https://api.render.com/deploy/srv-d4k83sbuibrs73fatdt0?key=rnd_q3BUcT9zhiOIuzP0YlaPgXUnyZqJ"
+          curl -X POST "https://api.render.com/deploy/srv-d4mrqpu3jp1c73a62r4g?key=Ypmvk6tLYT0"
