@@ -84,7 +84,7 @@ USE_TZ = True
 
 # ملفات static
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"  # مهم لـ collectstatic على Render
+STATIC_ROOT = BASE_DIR / "staticfiles"  # هذا المجلد الذي سينشأ عند collectstatic
 
 # إعدادات افتراضية
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
