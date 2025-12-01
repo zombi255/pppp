@@ -1,36 +1,34 @@
-# myproject/Dockerfile
-FROM python:3.11-slim-bullseye
+# استخدم Python 3.12 slim
+FROM python:3.12-slim
 
+# مجلد العمل داخل الحاوية
+WORKDIR /app
+
+# متغيرات التشغيل
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+# تثبيت الحزم الأساسية
+RUN apt-get update \
+    && apt-get install -y build-essential libpq-dev gettext curl \
+    && apt-get clean
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        libpq-dev \
-        gettext \
-        curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# تنظيف إضافي لتقليل الحجم
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN useradd --create-home appuser
+# نسخ ملف المتطلبات من repo (نفس أسلوب GitHub/Render)
+COPY requirements.txt .
 
-# نسخ ملف المتطلبات الصحيح بالنسبة للـ build context
-COPY ./requirements.txt ./
-RUN python -m pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# تثبيت المتطلبات
+RUN pip install --no-cache-dir -r requirements.txt
 
-# نسخ باقي المشروع
+# نسخ المشروع بالكامل
 COPY . .
 
-# جمع ملفات static
-RUN python manage.py collectstatic --noinput --settings=myproject.settings
+# إدخال سكريبت التشغيل entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
-RUN chown -R appuser:appuser /app
-USER appuser
-
+# فتح المنفذ
 EXPOSE 8000
-
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "myproject.wsgi:application"]
