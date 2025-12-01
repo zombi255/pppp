@@ -23,8 +23,9 @@ RUN apt-get update && \
 # إنشاء مستخدم غير جذر
 RUN useradd --create-home appuser
 
-# نسخ ملف المتطلبات من نفس المجلد الذي فيه Dockerfile
-COPY myproject/ ./
+# نسخ ملف requirements من المجلد myproject
+COPY myproject/requirements.txt ./
+
 
 
 # تثبيت مكتبات Python
