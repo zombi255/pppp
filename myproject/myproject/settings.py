@@ -1,17 +1,18 @@
+# myproject/settings.py
+
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# بناء مسارات المشروع
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
+# إعدادات الأمان
 SECRET_KEY = 'django-insecure-k8zdvx-51v1gknd5-_$d98mxmipemayzx)^8t2i^dv(!u*f9&*'
-DEBUG = True
-
+DEBUG = True  # غيّر إلى False في الإنتاج
 ALLOWED_HOSTS = [
     "projet-idl-cours.onrender.com",
 ]
 
-# Application definition
+# التطبيقات المثبتة
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,10 +20,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cours',
+    'cours',  # التطبيق الخاص بك
     'corsheaders',
 ]
 
+# الـ Middleware
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -36,10 +38,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'myproject.urls'
 
+# القوالب Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # ضع مسارات قوالب إضافية إذا لزم
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -53,7 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# Database (direct configuration without DATABASE_URL)
+# قاعدة البيانات
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -65,7 +68,7 @@ DATABASES = {
     }
 }
 
-# Password validation
+# التحقق من كلمات المرور
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -73,20 +76,21 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# الإعدادات الدولية
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-STATIC_URL = 'static/'
+# ملفات static
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"  # مهم لـ collectstatic على Render
 
+# إعدادات افتراضية
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 APPEND_SLASH = True
 
-# CORS settings
+# إعدادات CORS
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
