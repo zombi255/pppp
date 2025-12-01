@@ -23,7 +23,6 @@ jobs:
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
-        working-directory: myproject
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -58,7 +57,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 8️⃣ Build Docker Image
+      # 8️⃣ Build Docker Image (Dockerfile موجود في root)
       - name: Build Docker Image
         run: |
           docker build -f Dockerfile -t django-app .
