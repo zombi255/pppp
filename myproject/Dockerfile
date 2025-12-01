@@ -1,6 +1,4 @@
 # myproject/Dockerfile
-
-# استخدم صورة Python رسمية
 FROM python:3.11-slim-bullseye
 
 # منع Python من إنشاء ملفات pyc وتشغيله بدون buffering
@@ -23,19 +21,15 @@ RUN apt-get update && \
 # إنشاء مستخدم غير جذر
 RUN useradd --create-home appuser
 
-# نسخ ملف requirements من المجلد myproject
-COPY myproject/requirements.txt ./
-
-
-
-# تثبيت مكتبات Python
+# نسخ ملف المتطلبات وتثبيتها
+COPY COPY myproject/requirements.txt ./
 RUN python -m pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 # نسخ باقي ملفات المشروع
 COPY . .
 
-# جمع ملفات static
+# جمع ملفات static (يمكن تعديل settings حسب الحاجة)
 RUN python manage.py collectstatic --noinput --settings=myproject.settings || true
 
 # ضبط صلاحيات المستخدم
