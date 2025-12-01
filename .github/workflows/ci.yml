@@ -65,5 +65,5 @@ jobs:
       - name: Deploy to production
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-            service-id: ${{ srv-d4mtuh7gi27c738j83cg }}
-            api-key: ${{ rnd_QZojxVIgxdT5e00GEw34yBfDgeh7 }}
+            service-id: srv-d4mtuh7gi27c738j83cg 
+            api-key:  rnd_QZojxVIgxdT5e00GEw34yBfDgeh7 
