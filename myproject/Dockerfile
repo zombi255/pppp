@@ -1,9 +1,9 @@
-# استخدم هذا كـ myproject/Dockerfile
+# myproject/Dockerfile
 FROM python:3.11-slim-bullseye
 
 WORKDIR /app
 
-# انسخ dependencies من نفس المجلد
+# انسخ requirements من نفس المجلد
 COPY requirements.txt ./
 
 RUN python -m pip install --upgrade pip \
@@ -12,7 +12,7 @@ RUN python -m pip install --upgrade pip \
 # انسخ باقي المشروع
 COPY . .
 
-# جمع الملفات الثابتة
+# جمع static files
 RUN python manage.py collectstatic --noinput --settings=myproject.settings || true
 
 EXPOSE 8000
