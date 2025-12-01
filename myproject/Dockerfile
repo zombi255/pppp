@@ -22,7 +22,7 @@ RUN apt-get update && \
 RUN useradd --create-home appuser
 
 # نسخ ملف المتطلبات وتثبيتها
-COPY requirements.txt ./myproject
+COPY COPY myproject/requirements.txt ./
 RUN python -m pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
